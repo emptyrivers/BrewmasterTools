@@ -22,7 +22,7 @@ local addToPool = function(amount, decayTime)
     
     C_Timer.After(decayTime,  -- after delay of decayTime, remove from pool
         function()
-            astaggerPool = max(staggerPool - amount,0) --should never be negative
+            staggerPool = max(staggerPool - amount,0) --should never be negative
         end
     )
 end
