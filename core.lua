@@ -203,6 +203,14 @@ end
 local GetNormalStagger = function()
 	return staggerPool
 end
+b.GetNormalStagger = GetNormalStagger
+
+local GetNextTick = function()
+	return select(18,UnitDebuff('player',GetSpellInfo(124275)))
+	or select(18,UnitDebuff('player',GetSpellInfo(124274)))
+	or select(18,UnitDebuff('player',GetSpellInfo(124273)))
+end
+b.GetNextTick = GetNextTick
 local Update = function (self,event,...)
 	if event ~= "COMBAT_LOG_EVENT_UNFILTERED" then return end 
     
@@ -251,7 +259,7 @@ local Update = function (self,event,...)
     if UnitStagger("Player") > 0 then return true end --if you dont have any stagger, make this thing go away. 
     return false
 end
-b.GetNormalStagger = GetNormalStagger
+
 
 
 
