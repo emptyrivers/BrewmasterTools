@@ -9,13 +9,6 @@ local b = BrewmasterTools
 local staggerPool = 0
 local timeLimit 
 
---[=[
-
-we need to record stagger events, and add them to a pool temporarily DONE
-
-add an api that reports normalised Stagger target value
-
-]=]
 
 local addToPool = function(amount, decayTime)
     staggerPool = staggerPool + amount -- add to the pool
@@ -143,47 +136,60 @@ local filter = {
     
     [206675] = .25, --Shatter Essence. You shouldn't take damage from this, and it's pretty extreme damage. Double purifying this is warranted.
     [227554] = .5, --Fel Scythe
-    
-    
+	
+	--Tomb of Sargeras
+	
+	--Goroth
+	
+	[231363] = .5, --Burning Armor
+	[231395] = .5, --Burning Eruption
+	
+	--Demonic Inquisition
+	
+	[233426] = .5, --Scythe Sweep
+	
+	--Harjatan
+	
+	[231988] =  1, --Jagged Abrasion
+	[247403] = .5, --Unchecked Rage
+	[231854] = .5, --Unchecked Rage (the cleave one)
+	[234129] =  1, --Splashy Cleave
+	
+	--Mistress Sassz'ine
+	
+	[230201] =  1, --Burden of Pain
+	[-32]    =  1, --Melee (the shadow swings [idk if its actually a spell, or a swing that happens to do shadow. doesn't matter tho])
+	
+	--Sisters of the Moon
+	
+	[236547] = .5, --Moon Glaive
+	[239264] =  1, --Lunar Fire
+	
+	--Desolate Host
+	
+	[241566] =  1, --Crush Mind 
+	[236142] =  1, --Bone Shards
+	
+	--Maiden of Vigilance
+	
+	[235214] =  1, --Light Infusion
+	[235253] =  1, --Fel Infusion
+	[235569] = .75,--Hammer of Creation (cleave)
+	[241624] = .5, --Hammer of Creation (tankbuster)
+	[235573] = .75,--Hammer of Obliteration (cleave)
+	[241634] = .5, --Hammer of Obliteration (tankbuster)
+	
+	--Fallen Avatar
+	
+	[236494] = .5, --Desolate (terrible ability name tbh)
+	
+	--Kil'jaeden
+	
+	[239931] =  1, --Felclaws
 }
 
-filter.mt = {_index = .75}
-
-local known_encounters = {
-    
-    --We won't use the whitelist on unknown encounters; otherwise you can run into unfortunate circumstances
-    
-    
-    --Emerald Nightmare
-    
-    [1853] = true, --Nythendra
-    [1873] = true, --Il'gynoth
-    [1876] = true, --Elerethe
-    [1841] = true, --Ursoc
-    [1854] = true, --Dragons
-    [1877] = true, --Cenarius
-    [1864] = true, --Xaviu
-    
-    --Trials of Valor
-    
-    [1958] = true, --Odyn
-    [1962] = true, --Guarm
-    [2008] = true, --Helya
-    
-    --NightHold 
-    
-    [1849] = true, --Skorpyron
-    [1865] = true, --Chronomatic
-    [1867] = true, --Trilliax
-    [1871] = true, --Alluriel
-    [1862] = true, --Tichondrius
-    [1842] = true, --Krosus
-    [1886] = true, --Botanist
-    [1863] = true, --Star Augur
-    [1872] = true, --Elisande
-    [1866] = true  --Gul'dan 
-    
-}
+filter.mt = {__index = .75}
+setmetatable(filter,filter.mt)
 
 
 local fillPool = function(decayTime) --fills the pool temporarily to Max HP. Decays by 10% in .1 * decayTime second intervals.
@@ -225,7 +231,7 @@ local Update = function (self,event,...)
                 offset = offset + 3
                 if select(offset + 4,...) ==115069 then --we only want damage that is staggered
                     
-                    addToPool(filter[spellid] *  (select(offset + 7, ...)), timeLimit)
+                    addToPool((filter[spellid] or .75)*  (select(offset + 7, ...)), timeLimit)
                     -- table.insert(aura_env.table, {time, filter * (select(offset + 7, ...))}) -- record the time and damage absorbed
                     
                 end
@@ -248,6 +254,7 @@ end
 b.GetNormalStagger = GetNormalStagger
 
 
+
 local controlFrame = CreateFrame'Frame'
 controlFrame:RegisterEvent("PLAYER_REGEN_DISABLED")
 controlFrame:RegisterEvent("PLAYER_REGEN_ENABLED")
@@ -256,8 +263,10 @@ controlFrame:SetScript("OnEvent",function(self,event)
 		normalStaggerFrame:RegisterEvent("COMBAT_LOG_EVENT_UNFILTERED")
 		timeLimit = IsEquippedItem(137044) and 13 or 10
 	else
-		normalStaggerFrame:SetScript("OnEvent",nil)
 		normalStaggerFrame:UnregisterAllEvents()
 	end
 end)
 normalStaggerFrame:SetScript("OnEvent",Update)
+
+
+
