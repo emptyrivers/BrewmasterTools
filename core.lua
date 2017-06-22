@@ -188,7 +188,7 @@ local filter = {
 	[239931] =  1, --Felclaws
 }
 
-filter.mt = {__index = .75}
+filter.mt = {__index = function() return .75 end} 
 setmetatable(filter,filter.mt)
 
 
@@ -206,11 +206,14 @@ end
 b.GetNormalStagger = GetNormalStagger
 
 local GetNextTick = function()
-	return select(18,UnitDebuff('player',GetSpellInfo(124275)))
-	or select(18,UnitDebuff('player',GetSpellInfo(124274)))
-	or select(18,UnitDebuff('player',GetSpellInfo(124273)))
+	return select(17,UnitDebuff('player',GetSpellInfo(124275)))
+	or select(17,UnitDebuff('player',GetSpellInfo(124274)))
+	or select(17,UnitDebuff('player',GetSpellInfo(124273)))
+	or 0
 end
+
 b.GetNextTick = GetNextTick
+
 local Update = function (self,event,...)
 	if event ~= "COMBAT_LOG_EVENT_UNFILTERED" then return end 
     
