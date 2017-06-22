@@ -4,4 +4,5 @@
 
 
 core.lua
+normalStagger.lua
 slash.lua
