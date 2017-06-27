@@ -2,6 +2,8 @@
 
 -- this holds slash code
 
-local handler = function()
-  --does nothing yet, dummy function
+
+SLASH_BRMT1 = '/BrewmasterTools'
+SLASH_BRMT2 = '/brmt'
+function SlashCmdList.BRMT (mgs, editbox)
 end
