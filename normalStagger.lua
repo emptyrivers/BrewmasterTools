@@ -5,10 +5,11 @@
 --if BrewmasterTools.me ~= "MONK" then return end -- only monks have stagger
 
 local normalStagger = {}
-
+local timeLimit = IsEquippedItem(137044) and 13 or 10
 do
-  local addToPool, getVal = BrewmasterTools.util.makeTempAdder()
-
+  local addToPool, getVal = BrewmasterTools.makeTempAdder()
+  local staggerTracker = CreateFrame('frame')
+  staggerTracker:RegisterEvent("COMBAT_LOG_EVENT_UNFILTERED")
   local update = function (self,event,...)
 	   if event ~= "COMBAT_LOG_EVENT_UNFILTERED" then return end
     local timeStamp = select(1,...)
@@ -201,6 +202,8 @@ do
 
 	  [239931] =  1, --Felclaws
   }
+  staggerTracker:SetScript("OnEvent",update)
   setmetatable(filter,filter)
   normalStagger.GetNormalStagger = getVal
 end
+BrewmasterTools.AddModule('NormalStagger',normalStagger)

@@ -17,6 +17,10 @@ function BrewmasterTools.AddModule(name,  tbl)
   elseif BrewmasterTools[name] then
     error("A module by the name of "..name.." already exists.")
   else
-    BrewmasterTools[name] = tbl
+    for k,v in pairs(tbl) do
+      if not BrewmasterTools[k] then
+        BrewmasterTools[k] = v
+      end
+    end
   end
 end
