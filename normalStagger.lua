@@ -10,33 +10,6 @@ do
   local addToPool, getVal = BrewmasterTools.makeTempAdder()
   local staggerTracker = CreateFrame('frame')
   staggerTracker:RegisterEvent("COMBAT_LOG_EVENT_UNFILTERED")
-  local update = function (self,event,...)
-	   if event ~= "COMBAT_LOG_EVENT_UNFILTERED" then return end
-    local timeStamp = select(1,...)
-    local eventType = select(2,...)
-    local destGUID = select(8,...)
-    if destGUID == UnitGUID'player' then --grab only things that target me
-      local offset = 12
-      if eventType=="SPELL_ABSORBED" then --stagger's mitigation is all in absorb
-        if GetSpellInfo((select(offset, ...)))==(select(offset + 1, ...)) then
-          --this is a spell. Spells are filtered, so that only part of the damage is accounted for, to encourage purifying (with priority on mechanics with a lower value on the filter
-          --by default, 75% of each spell is added to our average damage staggered.
-          --Mechanics that you would be expected to purify on should have a filter value of .5 or lower=
-          --Spell damage that is similar to swing damage (in that it occurs frequently and isnt particularly dangerous (large in volume, small in impact) should have a filter of 1.
-          local spellid = select(offset,...)
-          --  local filter = aura_env.filter[spellid] or .75
-          offset = offset + 3
-          if select(offset + 4,...) ==115069 then --we only want damage that is staggered
-            addToPool(filter[spellid]* (select(offset + 7, ...)), timeLimit)
-          end
-        else -- this is a swing. Swings are always counted.
-          if select(offset + 4,...) ==115069 then --we only want damage that is staggered
-            addToPool( (select(offset + 7, ...)), timeLimit)
-          end
-        end
-      end
-    end
-  end
   local filter = {
 
     __index = function() return .75 end,
@@ -202,6 +175,34 @@ do
 
 	  [239931] =  1, --Felclaws
   }
+  local update = function (self,event,...)
+	   if event ~= "COMBAT_LOG_EVENT_UNFILTERED" then return end
+    local timeStamp = select(1,...)
+    local eventType = select(2,...)
+    local destGUID = select(8,...)
+    if destGUID == UnitGUID'player' then --grab only things that target me
+      local offset = 12
+      if eventType=="SPELL_ABSORBED" then --stagger's mitigation is all in absorb
+        if GetSpellInfo((select(offset, ...)))==(select(offset + 1, ...)) then
+          --this is a spell. Spells are filtered, so that only part of the damage is accounted for, to encourage purifying (with priority on mechanics with a lower value on the filter
+          --by default, 75% of each spell is added to our average damage staggered.
+          --Mechanics that you would be expected to purify on should have a filter value of .5 or lower=
+          --Spell damage that is similar to swing damage (in that it occurs frequently and isnt particularly dangerous (large in volume, small in impact) should have a filter of 1.
+          local spellid = select(offset,...)
+          --  local filter = aura_env.filter[spellid] or .75
+          offset = offset + 3
+          if select(offset + 4,...) ==115069 then --we only want damage that is staggered
+            addToPool(filter[spellid]* (select(offset + 7, ...)), timeLimit)
+          end
+        else -- this is a swing. Swings are always counted.
+          if select(offset + 4,...) ==115069 then --we only want damage that is staggered
+            addToPool( (select(offset + 7, ...)), timeLimit)
+          end
+        end
+      end
+    end
+  end
+
   staggerTracker:SetScript("OnEvent",update)
   setmetatable(filter,filter)
   normalStagger.GetNormalStagger = getVal
