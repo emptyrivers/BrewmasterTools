@@ -6,4 +6,5 @@
 SLASH_BRMT1 = '/BrewmasterTools'
 SLASH_BRMT2 = '/brmt'
 function SlashCmdList.BRMT (mgs, editbox)
+  print('Yes, in fact I do exist!')
 end
