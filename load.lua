@@ -16,6 +16,6 @@ loadFrame:SetScript("OnEvent",
         end
       end
     end
-
+    print('Welcome to Brwemastertools! If you encounter any issues, please visit https://github.com/emptyrivers/BrewmasterTools and open an issue, or contact Rivers#8800.')
   end
 )
