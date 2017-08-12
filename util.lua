@@ -32,4 +32,4 @@ function util.AllGroupMembers (reverse, forceParty)
 end
 
 
-BrewmasterTools.AddModule('util',util)
+BrewmasterTools.util = util
