@@ -6,6 +6,7 @@ local api = {}
 
 local prev = 0
 local nextCheck = 0
+local me = UnitGUID("player")
 
 local controlScripts = {
   OnUpdate = function(self)
@@ -14,7 +15,8 @@ local controlScripts = {
       local now = GetSpellCount(115072)
       if now ~= prev then
         prev = now
-        SendAddonMessage("brmtRE",now,"RAID")
+        local toSend = ("%s,%i"):format(me,now)
+        SendAddonMessage("brmtRE",toSend,"RAID")
       end
     end
   end,
@@ -23,6 +25,7 @@ local controlScripts = {
       self.reporting = true
     elseif event == "PLAYER_REGEN_ENABLED" then
       self.reporting = false
+    elseif
     end
   end,
   events = {
