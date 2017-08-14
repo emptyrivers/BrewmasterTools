@@ -233,19 +233,6 @@ end
 
 normalStagger.GetNormalStagger = getVal
 
-normalStagger.GetStaggerColor = function()
-  local perc = UnitStagger('player')/UnitHealthMax('player')
-  if perc < .33 then
-    return util.HexToRGBA('a9a9a9')
-  elseif perc < .66 then
-    return util.HexToRGBA('e3df24')
-  elseif perc < 1 then
-    return util.HexToRGBA('e39723')
-  elseif perc < 2 then
-    return util.HexToRGBA('fd1300')
-  else
-    return util.HexToRGBA('fd00b2')
-  end
-end
+
 
 BrewmasterTools.AddModule('NormalStagger',normalStagger,init,staggerTracker,scripts)
