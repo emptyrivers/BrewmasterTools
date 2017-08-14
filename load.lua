@@ -7,7 +7,7 @@ local loadFrame = CreateFrame("FRAME")
 loadFrame:RegisterEvent("ADDON_LOADED")
 loadFrame:SetScript("OnEvent",
   function(event,arg)
-    if event == "ADDON_LOADED" and arg = "BrewmasterTools" then
+    if event == "ADDON_LOADED" and arg == "BrewmasterTools" then
       --call init functions for each module, replace dummy functions
       for _, module in pairs(BrewmasterTools.modules) do
         module:init()

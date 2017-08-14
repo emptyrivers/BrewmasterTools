@@ -22,7 +22,7 @@ function BrewmasterTools.AddModule(name,  api, init, controlFrame, controlScript
   --for now, just add the table to main table at [name]
   if type(name) ~= "string" then
     error("BrewmasterTools: Improper argument #1 to AddModule: name must be a string.")
-  elseif type(tbl) ~= "table" then
+  elseif type(api) ~= "table" then
     error("BrewmasterTools: Improper argument #2 to AddModule: api must be a table.")
   elseif BrewmasterTools.modules[name] then
     error("BrewmasterTools: A module by the name of "..name.." already exists.")
