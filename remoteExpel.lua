@@ -25,7 +25,6 @@ local controlScripts = {
       self.reporting = true
     elseif event == "PLAYER_REGEN_ENABLED" then
       self.reporting = false
-    elseif
     end
   end,
   events = {
