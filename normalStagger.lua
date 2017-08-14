@@ -11,8 +11,8 @@ local util = BrewmasterTools.util
 
 
 local addToPool, getVal = util.makeTempAdder()
-local staggerTracker = CreateFrame('frame')
---staggerTracker:RegisterEvent("COMBAT_LOG_EVENT_UNFILTERED")
+local controlFrame = CreateFrame('frame')
+--controlFrame:RegisterEvent("COMBAT_LOG_EVENT_UNFILTERED")
 
 local filter = {
   --default value
@@ -213,8 +213,8 @@ local update = function (self,event,...)
   end
 end
 
---staggerTracker:SetScript("OnEvent",update)
-local scripts = {
+--controlFrame:SetScript("OnEvent",update)
+local controlScripts = {
   OnEvent = update,
   events = {"COMBAT_LOG_EVENT_UNFILTERED", "PLAYER_REGEN_DISABLED"}
 }
@@ -235,4 +235,4 @@ api.GetNormalStagger = getVal
 
 
 
-BrewmasterTools.AddModule('NormalStagger',api,init,staggerTracker,scripts)
+BrewmasterTools.AddModule('NormalStagger',api,init,controlFrame,controlScripts)
