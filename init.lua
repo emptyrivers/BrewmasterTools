@@ -20,7 +20,6 @@ BrewmasterTools.modules = {}
 function BrewmasterTools.AddModule(name,  api, init, controlFrame, controlScripts)
   --incorporate the module, and implant the functions
   --for now, just add the table to main table at [name]
-  print('attempting to add module',name)
   if type(name) ~= "string" then
     error("BrewmasterTools: Improper argument #1 to AddModule: name must be a string.")
   elseif type(api) ~= "table" then
@@ -36,7 +35,6 @@ function BrewmasterTools.AddModule(name,  api, init, controlFrame, controlScript
       error("BrewmasterTools: Improper argument #5 to AddModule: controlScripts must be a table.")
     end
   end
-  print(name,"validated: adding data now.")
   BrewmasterTools.modules[name] = {
     api = api,
     init = init,
