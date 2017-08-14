@@ -4,7 +4,7 @@
 
 --if BrewmasterTools.me ~= "MONK" then return end -- only monks have stagger
 
-local normalStagger = {}
+local api = {}
 local timeLimit = IsEquippedItem(137044) and 13 or 10
 local util = BrewmasterTools.util
 
@@ -231,8 +231,8 @@ local init = function(self)
   end
 end
 
-normalStagger.GetNormalStagger = getVal
+api.GetNormalStagger = getVal
 
 
 
-BrewmasterTools.AddModule('NormalStagger',normalStagger,init,staggerTracker,scripts)
+BrewmasterTools.AddModule('NormalStagger',api,init,staggerTracker,scripts)
