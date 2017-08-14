@@ -15,7 +15,7 @@ local staggerTracker = CreateFrame('frame')
 --staggerTracker:RegisterEvent("COMBAT_LOG_EVENT_UNFILTERED")
 
 local filter = {
-
+  --default value
   __index = function() return .75 end,
 
   -- delete an entry, or set it to false to remove it from the whitelist. To add a spell, add a [spellid] = <val> line, where spellid is the spell id of the damage you want to whitelist. Make sure the entries are separated by commas, or you will get endless errors.
