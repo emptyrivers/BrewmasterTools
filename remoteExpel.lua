@@ -6,7 +6,6 @@ local api = {}
 
 local prev = 0
 local nextCheck = 0
-local me = UnitGUID("player")
 
 local controlScripts = {
   OnUpdate = function(self)
@@ -15,7 +14,7 @@ local controlScripts = {
       local now = GetSpellCount(115072)
       if now ~= prev then
         prev = now
-        local toSend = ("%s,%i"):format(me,now)
+        local toSend = ("%s,%i"):format(UnitGUID('player') or 'unknown',now)
         SendAddonMessage("brmtRE",toSend,"RAID")
       end
     end
