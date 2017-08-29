@@ -15,7 +15,7 @@ loadFrame:SetScript("OnEvent",
           BrewmasterTools[name] = func
         end
       end
-    print('Welcome to BrewmasTertools! If you encounter any issues, please visit https://github.com/emptyrivers/BrewmasterTools and open an issue, or contact Rivers#8800.')
+    print('Welcome to Brewmastertools! If you encounter any issues, please visit https://github.com/emptyrivers/BrewmasterTools and open an issue, or contact Rivers#8800.')
     end
   end
 )
