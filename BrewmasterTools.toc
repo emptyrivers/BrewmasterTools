@@ -5,6 +5,11 @@
 ## SavedVariables: BRMTOOL
 ## Notes: Various bits and pieces to make your life as a brewmaster just a little bit easier.
 
+#libs
+Libs\LibStub\LibStub.lua
+Libs\AceConfig-3\AceConfig-3.lua
+
+#core
 init.lua
 util.lua
 slash.lua
