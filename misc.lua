@@ -11,9 +11,7 @@ function BrewmasterTools.GetNextTick(unit)
 end
 
 function BrewmasterTools.GetStaggerColor()
-
   local perc = BrewmasterTools.GetNextTick()/UnitHealthMax('player')
-
   if     perc <= .015 then
     return BrewmasterTools.util.HexToRGBA('a9a9a9')
   elseif perc <= .03 then

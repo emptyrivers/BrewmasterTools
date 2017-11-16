@@ -6,16 +6,19 @@
 ## Notes: Various bits and pieces to make your life as a brewmaster just a little bit easier.
 
 #libs
-Libs\LibStub\LibStub.lua
-Libs\AceConfig-3\AceConfig-3.lua
+embeds.xml
 
 #core
 init.lua
+#TODO: options.lua TODO
+load.lua
+
+
+#modules
 util.lua
 slash.lua
 misc.lua
 normalStagger.lua
 remoteExpel.lua
 staggerPause.lua
-healingBreakdown.lua
-load.lua
+#healingBreakdown.lua

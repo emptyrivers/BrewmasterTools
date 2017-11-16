@@ -2,50 +2,56 @@
 
 --this holds functionality for reporting (via addonmessage) how many orbs you have available
 
-local api = {}
 
-local prev = 0
-local nextCheck = 0
+local remoteExpel = CreateFrame("frame")
 
-local controlScripts = {
+remoteExpel.scripts = {
   OnUpdate = function(self)
-    if nextCheck <= GetTime() and self.reporting then
-      nextCheck = GetTime() + 1
-      local now = GetSpellCount(115072)
-      if now ~= prev then
-        prev = now
+    if self.nextCheck <= GetTime() then
+      self.nextCheck = GetTime() + .1
+      local current = GetSpellCount(115072)
+      if current ~= self.prevCount then
+        self.prevCount = now
         local toSend = ("%s,%i"):format(UnitGUID('player') or 'unknown',now)
         SendAddonMessage("brmtRE",toSend,"RAID")
       end
     end
   end,
   OnEvent = function(self, event, ...)
-    if event == "PLAYER_REGEN_DISABLED" then
-      self.reporting = true
-    elseif event == "PLAYER_REGEN_ENABLED" then
-      self.reporting = false
+    if InCombatLockdown() and IsInGroup() then
+      self:Enable()
+    else
+      self:Disable()
     end
   end,
-  events = {
-    "PLAYER_REGEN_ENABLED",
-    "PLAYER_REGEN_DISABLED"
-  }
 }
 
-local controlFrame = CreateFrame("frame")
+remoteExpel.events = {
+    "PLAYER_REGEN_ENABLED",
+    "PLAYER_REGEN_DISABLED"
+}
 
 
-
-local init = function(self)
-  for handler,script in pairs(self.controlScripts) do
-    if handler == "events" then
-      for _, event in ipairs(script) do
-        self.controlFrame:RegisterEvent(event)
-      end
-    else
-      self.controlFrame:SetScript(handler,script)
-    end
+function remoteExpel:Init()
+  for handler,script in pairs(self.scripts) do
+    self:SetScript(handler,script)
   end
+  for _, event in pairs(self.events) do
+    self:RegisterEvent(event)
+  end
+  self.scripts.OnEvent(self)
 end
 
-BrewmasterTools.AddModule("RemoteExpel",api,init,controlFrame,controlScripts)
+function remoteExpel:Enable()
+  self.nextCheck = GetTime() - 1
+  self.prevCount = -1
+  self.enabled = true
+  self:SetScript("OnUpdate", self.OnUpdate)
+end
+
+function remoteExpel:Disable()
+  self.enabled = false
+  self:SetScript("OnUpdate", nil)
+end
+
+BrewmasterTools.AddModule("RemoteExpel", remoteExpel)

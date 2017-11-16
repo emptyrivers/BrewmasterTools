@@ -9,15 +9,13 @@ loadFrame:SetScript("OnEvent",
   function(self,event,arg,...)
     if event == "ADDON_LOADED" and arg == "BrewmasterTools" then
       --call init functions for each module, replace dummy functions
-      for moduleName, module in pairs(BrewmasterTools.modules) do
-        module:init()
-        for name, func in pairs(module.api) do
-          BrewmasterTools[name] = func
-        end
+      for _, module in pairs(BrewmasterTools.modules) do
+        BrewmasterTools.LoadModule(module)
       end
       if not BRMTOOL.welcome then
         print('Welcome to Brewmastertools! If you encounter any issues, please visit https://github.com/emptyrivers/BrewmasterTools and open an issue, or contact Rivers#8800.')
       end
     end
+    BrewmasterTools.loaded = true
   end
 )

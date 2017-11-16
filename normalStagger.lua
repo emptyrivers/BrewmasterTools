@@ -9,12 +9,13 @@ local timeLimit = IsEquippedItem(137044) and 13 or 10
 local util = BrewmasterTools.util
 
 
-
 local addToPool, getVal = util.makeTempAdder()
-local controlFrame = CreateFrame('frame')
+
+local normalStagger = CreateFrame('frame')
 --controlFrame:RegisterEvent("COMBAT_LOG_EVENT_UNFILTERED")
 
-local filter = {
+normalStagger.api = {GetNormalStagger = getVal}
+normalStagger.filter = {
   --default value
   __index = function() return .75 end,
 
@@ -180,59 +181,60 @@ local filter = {
   [239931] =  1, --Felclaws
 }
 
-setmetatable(filter,filter)
+setmetatable(normalStagger.filter,normalStagger.filter)
 
-local update = function (self,event,...)
-  if event ~= "COMBAT_LOG_EVENT_UNFILTERED" then
-    timeLimit = IsEquippedItem(137044) and 13 or 10
-    return
-  end
-  local timeStamp = select(1,...)
-  local eventType = select(2,...)
-  local destGUID = select(8,...)
-  if destGUID == UnitGUID'player' then --grab only things that target me
-    local offset = 12
-    if eventType=="SPELL_ABSORBED" then --stagger's mitigation is all in absorb
-      if GetSpellInfo((select(offset, ...)))==(select(offset + 1, ...)) then
-        --this is a spell. Spells are filtered, so that only part of the damage is accounted for, to encourage purifying (with priority on mechanics with a lower value on the filter
-        --by default, 75% of each spell is added to our average damage staggered.
-        --Mechanics that you would be expected to purify on should have a filter value of .5 or lower=
-        --Spell damage that is similar to swing damage (in that it occurs frequently and isnt particularly dangerous (large in volume, small in impact) should have a filter of 1.
-        local spellid = select(offset,...)
-        --  local filter = aura_env.filter[spellid] or .75
-        offset = offset + 3
-        if select(offset + 4,...) ==115069 then --we only want damage that is staggered
-          addToPool(filter[spellid]* (select(offset + 7, ...)), timeLimit)
+normalStagger.scripts = {
+  OnEvent = function(self, event, _, eventType, _, _, _, _, _, destGUID, ...)
+    if event == "COMBAT_LOG_EVENT_UNFILTERED" then
+      if destGUID == UnitGUID'player' then --grab only things that target me
+        local offset = 4
+        if eventType=="SPELL_ABSORBED" then --stagger's mitigation is all in absorb
+          if GetSpellInfo((select(offset, ...)))==(select(offset + 1, ...)) then
+          local absorbedSpell  = select(offset, ...)
+            offset = offset + 3
+            if select(offset + 4, ...) ==115069 then --we only want damage that is staggered
+              addToPool(self.filter[absorbedSpell] * (select(offset + 7, ...)), timeLimit)
+            end
+          else -- this is a swing. Swings are always counted.
+            if select(offset + 4,...) ==115069 then --we only want damage that is staggered
+              addToPool((select(offset + 7, ...)), timeLimit)
+            end
+          end
         end
-      else -- this is a swing. Swings are always counted.
-        if select(offset + 4,...) ==115069 then --we only want damage that is staggered
-          addToPool( (select(offset + 7, ...)), timeLimit)
-        end
+      end
+    elseif event == "PLAYER_REGEN_ENABLED" then
+      self:Disable()
+    elseif event == "PLAYER_REGEN_DISABLED" then
+      self:Enable()
+    else
+      if InCombatLockdown() then
+        self:Enable()
+      else
+        self:Disable()
       end
     end
   end
-end
-
---controlFrame:SetScript("OnEvent",update)
-local controlScripts = {
-  OnEvent = update,
-  events = {"COMBAT_LOG_EVENT_UNFILTERED", "PLAYER_REGEN_DISABLED"}
 }
 
-local init = function(self)
-  for handler,script in pairs(self.controlScripts) do
-    if handler == "events" then
-      for _, event in ipairs(script) do
-        self.controlFrame:RegisterEvent(event)
-      end
-    else
-      self.controlFrame:SetScript(handler,script)
-    end
+normalStagger.events = {"COMBAT_LOG_EVENT_UNFILTERED", "PLAYER_REGEN_DISABLED", "PLAYER_REGEN_ENABLED"}
+
+function normalStagger:Init()
+  for handler, script in pairs(self.scripts) do
+    self:SetScript(handler, script)
   end
+  for _, event in pairs(self.events) do
+    self:RegisterEvent(event)
+  end
+  self.scripts.OnEvent(self)
 end
 
-api.GetNormalStagger = getVal
+function normalStagger:Enable()
+  self.timeLimit = IsEquippedItem(137044) and 13 or 10
+  self:RegisterEvent("COMBAT_LOG_EVENT_UNFILTERED")
+end
 
+function normalStagger:Disable()
+  self:UnregisterEvent("COMBAT_LOG_EVENT_UNFILTERED")
+end
 
-
-BrewmasterTools.AddModule('NormalStagger',api,init,controlFrame,controlScripts)
+BrewmasterTools.AddModule('NormalStagger',normalStagger)

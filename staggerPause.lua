@@ -1,60 +1,51 @@
 --Copyright (c) 2017 by Rivers. See ..\LICENSE.md for details
 
 
-local haveBuff, pauseExpiry
+local staggerPause = CreateFrame("frame")
 
---on USC - ISB:
-local function OnEvent(self, event, unit, _, _, _, spellID)
-  if event == "UNIT_SPELLCAST_SUCCEEDED"
-  and unit == "player"
-  and spellID == 115308
-  and haveBuff then
-    pauseExpiry = pauseExpiry and (pauseExpiry + 3) or GetTime() + 3
-  end
-end
-
-local function OnUpdate(self)
-  if pauseExpiry then
-    pauseExpiry = GetTime() < pauseExpiry and pauseExpiry or nil
-  end
-  haveBuff = UnitBuff("player",(GetSpellInfo(228563)))
-end
-
-local events = {
-  "UNIT_SPELLCAST_SUCCEEDED"
-}
-
-local function IsStaggerPaused()
-  return pauseExpiry ~= nil, pauseExpiry
-end
-
-local name, api, init, controlFrame, controlScripts
-
-name = "StaggerPause"
-
-api = {
-  IsStaggerPaused = IsStaggerPaused
-}
-
-function init(self)
-  for handler,script in pairs(self.controlScripts) do
-    if handler == "events" then
-      for _, event in ipairs(script) do
-        self.controlFrame:RegisterEvent(event)
+staggerPause.scripts = {
+  OnEvent = function(self, event, unit, _, _, _, spellID)
+    if event == "UNIT_SPELLCAST_SUCCEEDED" then
+      if unit == "player" and spellID == 115308 and self.haveBuff then
+        self.pauseExpiry = self.pauseExpiry and (self.pauseExpiry + 3) or GetTime() + 3
+        self:Enable()
       end
     else
-      self.controlFrame:SetScript(handler,script)
+      self.haveBuff = UnitBuff("player",(GetSpellInfo(228563)))
     end
+  end,
+  OnUpdate = function(self)
+    if not self.pauseExpiry or self.pauseExpiry < GetTime() then
+      self:Disable()
+    end
+  end
+}
+
+staggerPause.events = {
+  "UNIT_SPELLCAST_SUCCEEDED",
+  "UNIT_AURA"
+}
+
+staggerPause.api = {
+  GetStaggerPause = function()
+    return  staggerPause.pauseExpiry
+  end,
+}
+
+function staggerPause:Init()
+  for _, event in pairs(self.events) do
+    self:RegisterUnitEvent(event, "player")
+  end
+  for handler, script in pairs(self.scripts) do
+    self:SetScript(handler, script)
   end
 end
 
-controlFrame = CreateFrame("frame")
-
-controlScripts = {
-  OnEvent = OnEvent,
-  OnUpdate = OnUpdate,
-  events = events,
-}
-
-
-BrewmasterTools.AddModule(name,api,init,controlFrame,controlScripts)
+function staggerPause:Enable()
+  self:SetScript("OnUpdate", self.scripts.OnUpdate)
+end
+function staggerPause:Disable()
+  self.pauseExpiry = nil
+  self:SetScript("OnUpdate", nil)
+end
+BrewmasterTools.AddModule("staggerPause", staggerPause)
