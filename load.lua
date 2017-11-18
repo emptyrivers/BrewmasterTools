@@ -12,8 +12,10 @@ loadFrame:SetScript("OnEvent",
       for _, module in pairs(BrewmasterTools.modules) do
         BrewmasterTools.LoadModule(module)
       end
+      BRMTOOL = BRMTOOL or {}
       if not BRMTOOL.welcome then
         print('Welcome to Brewmastertools! If you encounter any issues, please visit https://github.com/emptyrivers/BrewmasterTools and open an issue, or contact Rivers#8800.')
+        BRMTOOL.welcome = true
       end
     end
     BrewmasterTools.loaded = true
