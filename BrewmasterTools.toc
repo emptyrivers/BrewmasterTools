@@ -6,7 +6,7 @@
 ## Notes: Various bits and pieces to make your life as a brewmaster just a little bit easier.
 
 #libs
-embeds.xml
+#embeds.xml
 
 #core
 init.lua
