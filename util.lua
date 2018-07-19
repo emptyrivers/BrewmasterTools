@@ -3,6 +3,7 @@
 --defines utilities that we can use elsewhere in the addon
 local util = {}
 
+local wowVersionString, _, _, wowTOC = GetBuildInfo()
 
 function util.makeTempAdder()
   local val = 0
