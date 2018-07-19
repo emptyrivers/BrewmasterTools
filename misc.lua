@@ -4,9 +4,9 @@
 
 function BrewmasterTools.GetNextTick(unit)
   unit = UnitExists(unit) and unit or 'player'
-	return select(17,UnitDebuff(unit,(GetSpellInfo(124275))))
-	or select(17,UnitDebuff(unit,(GetSpellInfo(124274))))
-	or select(17,UnitDebuff(unit,(GetSpellInfo(124273))))
+	return select(16,BrewmasterTools.util.UnitDebuff(unit,(GetSpellInfo(124275))))
+	or select(16,BrewmasterTools.util.UnitDebuff(unit,(GetSpellInfo(124274))))
+	or select(16,BrewmasterTools.util.UnitDebuff(unit,(GetSpellInfo(124273))))
 	or 0
 end
 

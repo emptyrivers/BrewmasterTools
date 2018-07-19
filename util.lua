@@ -39,4 +39,32 @@ function util.HexToRGBA(hex) --expects a 6-8 digit hex string.
          tonumber((hex:sub(7,8)) or 0, 16)/255
 end
 
+function util.UnitBuff(unit, spellName)
+  if wowTOC == 80000 then
+    for i = 1, 40 do
+      local name = UnitBuff(unit, i)
+      if not name then return end
+      if spellName == name then
+        return UnitBuff(unit, i)
+      end
+    end
+  else
+    return UnitBuff(unit, spellName)
+  end
+end
+
+function util.UnitDebuff(unit, spellName)
+  if wowTOC == 80000 then
+    for i = 1, 40 do
+      local name = UnitDebuff(unit, i)
+      if not name then return end
+      if spellName == name then
+        return UnitDebuff(unit, i)
+      end
+    end
+  else
+    return UnitDebuff(unit, spellName)
+  end
+end
+
 BrewmasterTools.util = util
