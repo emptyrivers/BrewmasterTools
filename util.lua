@@ -3,8 +3,6 @@
 --defines utilities that we can use elsewhere in the addon
 local util = {}
 
-local _, _, _, wowTOC = GetBuildInfo()
-
 function util.makeTempAdder()
   local val = 0
   return function(toAdd, decayTime) --modify upvalue
@@ -41,30 +39,22 @@ function util.HexToRGBA(hex) --expects a 6-8 digit hex string.
 end
 
 function util.UnitBuff(unit, spellName)
-  if wowTOC >= 80000 then
-    for i = 1, 40 do
-      local name = UnitBuff(unit, i)
-      if not name then return end
-      if spellName == name then
-        return UnitBuff(unit, i)
-      end
+  for i = 1, 40 do
+    local name = UnitBuff(unit, i)
+    if not name then return end
+    if spellName == name then
+      return UnitBuff(unit, i)
     end
-  else
-    return UnitBuff(unit, spellName)
   end
 end
 
 function util.UnitDebuff(unit, spellName)
-  if wowTOC >= 80000 then
-    for i = 1, 40 do
-      local name = UnitDebuff(unit, i)
-      if not name then return end
-      if spellName == name then
-        return UnitDebuff(unit, i)
-      end
+  for i = 1, 40 do
+    local name = UnitDebuff(unit, i)
+    if not name then return end
+    if spellName == name then
+      return UnitDebuff(unit, i)
     end
-  else
-    return UnitDebuff(unit, spellName)
   end
 end
 
