@@ -1,0 +1,11 @@
+[submodule "LittleScripts"]
+	path = LittleScripts
+	url = https://github.com/emptyrivers/LittleScripts.git
+[submodule "Libs"]
+	path = Libs
+	url = https://github.com/emptyrivers/LIttleScripts.git
+	branch = master
+[submodule "Libs/LittleScripts"]
+	path = Libs/LittleScripts
+	url = https://github.com/emptyrivers/LIttleScripts.git
+	branch = master
