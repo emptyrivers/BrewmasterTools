@@ -11,7 +11,7 @@ staggerPause.scripts = {
         self:Enable()
       end
     else
-      self.haveBuff = UnitBuff("player",(GetSpellInfo(228563)))
+      self.haveBuff = BrewmasterTools.util.UnitBuff("player",228563)
     end
   end,
   OnUpdate = function(self)

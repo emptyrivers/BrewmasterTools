@@ -2,12 +2,14 @@
 
 --miscellaneous functions that don't require a whole module
 
-function BrewmasterTools.GetNextTick(unit)
-  unit = UnitExists(unit) and unit or 'player'
-	return select(17,UnitDebuff(unit,(GetSpellInfo(124275))))
-	or select(17,UnitDebuff(unit,(GetSpellInfo(124274))))
-	or select(17,UnitDebuff(unit,(GetSpellInfo(124273))))
-	or 0
+local staggerDebuffs = {
+  [124273] = true,
+  [124274] = true,
+  [124275] = true,
+}
+
+function BrewmasterTools.GetNextTick()
+  return BrewmasterTools.util.UnitAura("player", staggerDebuffs, "HARMFUL")
 end
 
 function BrewmasterTools.GetStaggerColor()
