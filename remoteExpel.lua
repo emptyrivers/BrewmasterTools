@@ -2,7 +2,6 @@
 
 --this holds functionality for reporting (via addonmessage) how many orbs you have available
 
-
 local remoteExpel = CreateFrame("frame")
 
 remoteExpel.scripts = {
@@ -13,7 +12,7 @@ remoteExpel.scripts = {
       if current ~= self.prevCount then
         self.prevCount = now
         local toSend = ("%s,%i"):format(UnitGUID('player') or 'unknown',now)
-        SendAddonMessage("brmtRE",toSend,"RAID")
+        C_ChatInfo.SendAddonMessage("brmtRE",toSend,"RAID")
       end
     end
   end,
@@ -27,10 +26,9 @@ remoteExpel.scripts = {
 }
 
 remoteExpel.events = {
-    "PLAYER_REGEN_ENABLED",
-    "PLAYER_REGEN_DISABLED"
+  "PLAYER_REGEN_ENABLED",
+  "PLAYER_REGEN_DISABLED"
 }
-
 
 function remoteExpel:Init()
   for handler,script in pairs(self.scripts) do
