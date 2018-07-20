@@ -9,7 +9,7 @@ local staggerDebuffs = {
 }
 
 function BrewmasterTools.GetNextTick()
-  return BrewmasterTools.util.UnitAura("player", staggerDebuffs, "HARMFUL")
+  return select(16,BrewmasterTools.util.UnitAura("player", staggerDebuffs, "HARMFUL")) or 0
 end
 
 function BrewmasterTools.GetStaggerColor()

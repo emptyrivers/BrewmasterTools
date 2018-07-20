@@ -32,11 +32,11 @@ local function handleCLEU(self, _, eventType, _, _, _, _, _, destGUID, ...)
       local absorbedSpell  = select(offset, ...)
         offset = offset + 3
         if select(offset + 4, ...) ==115069 then --we only want damage that is staggered
-          addToPool(self.filter[absorbedSpell] * (select(offset + 7, ...)), timeLimit)
+          addToPool(self.filter[absorbedSpell] * (select(offset + 7, ...)), self.timeLimit)
         end
       else -- this is a swing. Swings are always counted.
         if select(offset + 4,...) ==115069 then --we only want damage that is staggered
-          addToPool((select(offset + 7, ...)), timeLimit)
+          addToPool((select(offset + 7, ...)), self.timeLimit)
         end
       end
     end
