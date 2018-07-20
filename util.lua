@@ -38,21 +38,11 @@ function util.HexToRGBA(hex) --expects a 6-8 digit hex string.
          tonumber((hex:sub(7,8)) or 0, 16)/255
 end
 
-function util.UnitBuff(unit, spellName)
+function util.UnitDebuff(unit, spellId)
   for i = 1, 40 do
-    local name = UnitBuff(unit, i)
-    if not name then return end
-    if spellName == name then
-      return UnitBuff(unit, i)
-    end
-  end
-end
-
-function util.UnitDebuff(unit, spellName)
-  for i = 1, 40 do
-    local name = UnitDebuff(unit, i)
-    if not name then return end
-    if spellName == name then
+    local sId = select(10, UnitDebuff(unit, i))
+    if not sId then return end
+    if spellId == sId then
       return UnitDebuff(unit, i)
     end
   end

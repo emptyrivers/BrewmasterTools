@@ -4,10 +4,13 @@
 
 function BrewmasterTools.GetNextTick(unit)
   unit = UnitExists(unit) and unit or 'player'
-	return select(16,BrewmasterTools.util.UnitDebuff(unit,(GetSpellInfo(124275))))
-	or select(16,BrewmasterTools.util.UnitDebuff(unit,(GetSpellInfo(124274))))
-	or select(16,BrewmasterTools.util.UnitDebuff(unit,(GetSpellInfo(124273))))
-	or 0
+  for i = 1, 40 do
+    local _, _, _, _, _, _, _, _, _, spellId, _, _, _, _, _, value, _ = UnitBuff(unit, i)
+    if spellId == 124273 or spellId == 124274 or spellId == 124275 then
+      return value
+    end
+  end
+  return 0
 end
 
 function BrewmasterTools.GetStaggerColor()
