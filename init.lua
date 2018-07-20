@@ -19,21 +19,12 @@ local function dummy() end
 BrewmasterTools.modules = {}
 
 function BrewmasterTools.AddModule(name, module, overrideAPI)
-  do--ensure sanity
-    if type(name) ~= "string" then
-      error("BrewmasterTools: Improper argument #1 to AddModule: name must be a string.")
-    elseif BrewmasterTools.modules[name] then
-      error("BrewmasterTools: A module by the name of "..name.." already exists.")
-    elseif type(module.Init) ~= 'function' then
-      error("BrewmasterTools: "..name.." requires an Init method.")
-    elseif type(module.Enable) ~= 'function' then
-      error("BrewmasterTools: "..name.." requires an Enable method.")
-    elseif type(module.Disable) ~= 'function' then
-      error("BrewmasterTools: "..name.." requires a Disable method.")
-    elseif type(module.scripts) ~= 'table' then
-      error("BrewmasterTools: "..name.." requires a scripts attribute.")
-    end
-  end
+  assert(type(name) == "string", "BrewmasterTools: Improper argument #1 to AddModule: name must be a string.")
+  assert(not BrewmasterTools.modules[name], "BrewmasterTools: A module by the name of "..name.." already exists.")
+  assert(type(module.Init) == 'function', "BrewmasterTools: "..name.." requires an Init method.")
+  assert(type(module.Enable) == 'function', "BrewmasterTools: "..name.." requires an Enable method.")
+  assert(type(module.Disable) == 'function', "BrewmasterTools: "..name.." requires a Disable method.")
+  assert(type(module.scripts) == 'table', "BrewmasterTools: "..name.." requires a scripts attribute.")
   BrewmasterTools.modules[name] = module
   if not BrewmasterTools.loaded and module.api then
     for k,v in pairs(module.api) do
