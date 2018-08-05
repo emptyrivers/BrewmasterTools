@@ -29,7 +29,7 @@ function BrewmasterTools.AddModule(name, module, overrideAPI)
   if not BrewmasterTools.loaded and module.api then
     for k,v in pairs(module.api) do
       if BrewmasterTools[k] and not overrideAPI then
-        print("Brwemastertools - Warning: module",name,"has attempted to add API method",k,"which already exists. The results of this API call will be unpredictable.")
+        print("Brewmastertools - Warning: module",name,"has attempted to add API method",k,"which already exists. The results of this API call will be unpredictable.")
         --ensure that anything using the api doesn't trigger an attempt to call a nil value
         BrewmasterTools[k] = dummy
       end
