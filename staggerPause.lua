@@ -4,7 +4,7 @@
 local staggerPause = CreateFrame("frame")
 
 staggerPause.scripts = {
-  OnEvent = function(self, event, unit, _, _, _, spellID)
+  OnEvent = function(self, event, unit, _, spellID)
     if event == "UNIT_SPELLCAST_SUCCEEDED" then
       if unit == "player" and spellID == 115308 and self.haveBuff then
         self.pauseExpiry = self.pauseExpiry and (self.pauseExpiry + 3) or GetTime() + 3
