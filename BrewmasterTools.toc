@@ -1,20 +1,7 @@
 #  Copyright (c) 2017 by Rivers. See ..\LICENSE.md for details
 
-## Interface: 80000
+## Interface: 80100
 ## Title: BrewmasterTools
-## SavedVariables: BRMTOOL
-## Notes: Various bits and pieces to make your life as a brewmaster just a little bit easier.
+## Notes: This project has been retired.
 
-#libs
-#embeds.xml
-
-#core
-init.lua
-load.lua
-
-#modules
-util.lua
-misc.lua
-normalStagger.lua
-remoteExpel.lua
-staggerPause.lua
+deprecated.lua

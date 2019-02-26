@@ -1,6 +1,0 @@
-ignore:
-  - .gitignore
-  - .gitmodules
-  - .luacheckrc
-  - .editorconfig
-  - ISSUE_TEMPLATE.md
